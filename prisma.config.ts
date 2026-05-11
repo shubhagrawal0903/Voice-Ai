@@ -2,6 +2,6 @@ import { defineConfig } from 'prisma/config'
 
 export default defineConfig({
   datasource: {
-    url: "postgresql://postgres:123456@localhost:5432/vodex_calls",
+    url: "postgresql://neondb_owner:npg_5KVcTapwH4IM@ep-tiny-hat-aq6v847m-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
   }
 })
