@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* ─── Tailwind v4 CSS-first theme tokens ─── */
+@theme {
+  --color-bg-base: #080B12;
+  --color-surface:  rgba(255,255,255,0.03);
+  --color-border:   rgba(255,255,255,0.08);
+
+  --color-violet-glow: #7C3AED;
+  --color-cyan-glow:   #06B6D4;
+  --color-emerald-glow: #10B981;
+
+  --font-sans: 'DM Sans', 'Inter', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+}
+
+/* ─── Base resets ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #080B12;
+  color: #f1f5f9;
+  font-family: 'DM Sans', 'Inter', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar        { width: 4px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.10); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.20); }
+
+/* ─── Keyframes ─── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ─── Utility helpers ─── */
+.animate-fade-in  { animation: fade-in  0.25s ease both; }
+.animate-slide-up { animation: slide-up 0.30s ease both; }
+.animate-spin     { animation: spin     0.8s linear infinite; }
+.animate-pulse-ring { animation: pulse-ring 2s ease-in-out infinite; }
+
+/* Glass card surface */
+.glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.glass:hover {
+  border-color: rgba(255,255,255,0.14);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient border glow on focus */
+.input-glow:focus {
+  outline: none;
+  border-color: rgba(124,58,237,0.5);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+}

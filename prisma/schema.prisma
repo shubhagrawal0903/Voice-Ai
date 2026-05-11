@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+  calls     Call[]
+}
+
+model Call {
+  id           String    @id @default(cuid())
+  contactId    String
+  contact      Contact   @relation(fields: [contactId], references: [id])
+  vapiCallId   String?
+  status       String    @default("initiated")
+  transcript   String?
+  recordingUrl String?
+  duration     Int?
+  startedAt    DateTime  @default(now())
+  endedAt      DateTime?
+  createdAt    DateTime  @default(now())
+}
