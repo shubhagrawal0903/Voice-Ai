@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+function toE164(phone: string): string {
+  const digits = phone.replace(/\D/g, '')
+  if (phone.startsWith('+')) return '+' + digits
+  if (digits.length === 10) return '+91' + digits
+  if (digits.length === 12 && digits.startsWith('91')) return '+' + digits
+  return '+' + digits
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { contactId } = await req.json()
@@ -8,39 +16,40 @@ export async function POST(req: NextRequest) {
     const contact = await prisma.contact.findUnique({ where: { id: contactId } })
     if (!contact) return NextResponse.json({ error: 'Contact not found' }, { status: 404 })
 
-    // Trigger call via Vapi REST API
-    const vapiRes = await fetch('https://api.vapi.ai/call/phone', {
+    const phoneNumber = toE164(contact.phone)
+
+    const blandRes = await fetch('https://api.bland.ai/v1/calls', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.VAPI_PRIVATE_KEY}`,
+        'Authorization': process.env.BLAND_API_KEY!,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        assistantId: process.env.VAPI_ASSISTANT_ID,
-        phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID,
-        customer: {
-          name: contact.name,
-          number: contact.phone,
-        },
+        phone_number: phoneNumber,
+        task: "You are a friendly outbound AI agent. Introduce yourself as Alex and have a brief natural conversation.",
+        voice: "maya",
+        first_sentence: "Hi, this is Alex calling. Do you have a quick minute?",
+        wait_for_greeting: true,
+        record: true,
       }),
     })
 
-    const vapiData = await vapiRes.json()
+    const blandData = await blandRes.json()
+    console.log('[Bland AI] Response:', blandData)
 
-    if (!vapiRes.ok) {
-      return NextResponse.json({ error: vapiData.message || 'Vapi call failed' }, { status: 400 })
+    if (!blandRes.ok) {
+      return NextResponse.json({ error: blandData.message || 'Call failed' }, { status: 400 })
     }
 
-    // Save call record to DB
     const call = await prisma.call.create({
       data: {
         contactId: contact.id,
-        vapiCallId: vapiData.id,
-        status: vapiData.status || 'initiated',
+        vapiCallId: blandData.call_id,
+        status: 'initiated',
       },
     })
 
-    return NextResponse.json({ call, vapiData })
+    return NextResponse.json({ call, blandData })
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: 'Failed to trigger call' }, { status: 500 })
