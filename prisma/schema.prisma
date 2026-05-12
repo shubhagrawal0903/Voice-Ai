@@ -22,6 +22,8 @@ model Call {
   status       String    @default("initiated")
   transcript   String?
   recordingUrl String?
+  summary      String?
+  analysis     String?
   duration     Int?
   startedAt    DateTime  @default(now())
   endedAt      DateTime?

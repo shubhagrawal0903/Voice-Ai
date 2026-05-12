@@ -25,12 +25,15 @@ export async function POST(req: NextRequest) {
     const status = blandData.status === 'completed' ? 'completed' : blandData.status || call.status
     const duration = blandData.call_length ? Math.floor(blandData.call_length) : null
 
+    const summary = blandData.summary || null
+
     const updated = await prisma.call.update({
       where: { id: callId },
       data: {
         status,
         transcript,
         recordingUrl,
+        summary,
         duration,
         endedAt: blandData.end_at ? new Date(blandData.end_at) : call.endedAt,
       },
