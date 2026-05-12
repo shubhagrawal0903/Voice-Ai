@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     const recordingUrl = blandData.recording_url || null
     const status = blandData.status === 'completed' ? 'completed' : blandData.status || call.status
-    const duration = blandData.call_length ? Math.floor(blandData.call_length) : null
+    const duration = blandData.call_length ? Math.floor(blandData.call_length * 60) : null
 
     const summary = blandData.summary || null
 
