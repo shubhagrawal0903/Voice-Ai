@@ -127,7 +127,7 @@ export default function AnalyticsTab({ calls }: AnalyticsTabProps) {
         if (c.status === 'completed' || c.status === 'ended') PickedUp++
         const res = detectResolution(c).resolution
         if (res === 'Resolved') Resolved++
-        else if (res === 'Unresolved' || c.status === 'failed') Unresolved++
+        else if (res === 'Unresolved' || res === 'Partially Resolved' || res === 'No Answer') Unresolved++
       })
       
       dailyTrend.push({ date: label, PickedUp, Resolved, Unresolved })
