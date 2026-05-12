@@ -100,7 +100,21 @@ export default function Home() {
     setCalls(Array.isArray(data) ? data : [])
   }, [])
 
-  useEffect(() => { fetchContacts(); fetchCalls() }, [fetchContacts, fetchCalls])
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        fetchCalls()
+        fetchContacts()
+      }
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [fetchCalls, fetchContacts])
+
+  useEffect(() => {
+    fetchContacts()
+    fetchCalls()
+  }, [fetchContacts, fetchCalls])
 
   /* ─── Actions ───────────────────────────────────────────────────── */
   const addContact = async () => {
@@ -180,7 +194,13 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-sm font-bold tracking-tight gradient-text">VoiceCall Dashboard</h1>
-                <p className="text-[10px] text-slate-500 leading-none mt-0.5">Powered by Bland AI</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <p className="text-[10px] text-slate-500 leading-none">Powered by Bland AI</p>
+                  <div className="flex items-center gap-1 bg-emerald-500/5 px-1.5 py-0.5 rounded-full border border-emerald-500/10">
+                    <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[7px] font-bold text-emerald-500/80 uppercase tracking-tight">Live</span>
+                  </div>
+                </div>
               </div>
             </div>
 
