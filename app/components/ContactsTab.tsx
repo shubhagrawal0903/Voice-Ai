@@ -56,8 +56,8 @@ export default function ContactsTab({
   return (
     <div className="space-y-5 animate-slide-up">
       {/* Add contact form */}
-      <div className="glass rounded-2xl p-6">
-        <h2 className="text-sm font-semibold text-slate-300 mb-5 flex items-center gap-2">
+      <div className="glass rounded-2xl p-4 sm:p-6">
+        <h2 className="text-sm font-semibold text-slate-300 mb-4 sm:mb-5 flex items-center gap-2">
           <span className="w-6 h-6 rounded-lg bg-violet-500/20 flex items-center justify-center">
             <Plus size={13} className="text-violet-400" />
           </span>
@@ -69,21 +69,21 @@ export default function ContactsTab({
             value={name}
             onChange={e => onNameChange(e.target.value)}
             placeholder="Full Name"
-            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all"
+            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 sm:py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all min-h-[44px]"
           />
           <input
             id="contact-phone"
             value={phone}
             onChange={e => onPhoneChange(e.target.value)}
             placeholder="+91XXXXXXXXXX"
-            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all"
+            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 sm:py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all min-h-[44px]"
             onKeyDown={e => e.key === 'Enter' && onAdd()}
           />
           <button
             id="add-contact-btn"
             onClick={onAdd}
             disabled={loading}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="flex items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto min-h-[44px]"
             style={{ background: 'linear-gradient(135deg,#7C3AED,#06B6D4)' }}
           >
             {loading
@@ -94,22 +94,22 @@ export default function ContactsTab({
       </div>
 
       {/* Search + bulk actions */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-48">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             id="contact-search"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search contacts…"
-            className="input-glow w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all"
+            className="input-glow w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-3 sm:py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all min-h-[44px]"
           />
         </div>
         {selectedIds.size > 0 && (
           <button
             id="call-all-selected-btn"
             onClick={() => onCallAll(Array.from(selectedIds))}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 shrink-0"
+            className="flex items-center justify-center gap-2 px-4 py-3 sm:py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 w-full sm:w-auto min-h-[44px]"
             style={{ background: 'linear-gradient(135deg,#059669,#06B6D4)' }}
           >
             <PhoneCall size={14} />
@@ -120,7 +120,7 @@ export default function ContactsTab({
 
       {/* Contact list */}
       {filtered.length === 0 ? (
-        <div className="glass rounded-2xl p-16 text-center">
+        <div className="glass rounded-2xl p-8 sm:p-16 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-violet-500/10 flex items-center justify-center">
             <User size={28} className="text-violet-400/60" />
           </div>
@@ -154,7 +154,7 @@ export default function ContactsTab({
                 className="glass rounded-2xl overflow-hidden transition-all duration-200 animate-slide-up"
                 style={{ animationDelay: `${i * 30}ms` }}
               >
-                <div className="p-4 flex items-center gap-4">
+                <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
                   {/* Checkbox */}
                   <input
                     id={`select-${contact.id}`}
@@ -166,7 +166,7 @@ export default function ContactsTab({
 
                   {/* Avatar */}
                   <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white cursor-pointer hover:scale-105 transition-transform"
+                    className="w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white cursor-pointer hover:scale-105 transition-transform"
                     style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.5),rgba(6,182,212,0.5))' }}
                     onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
                   >
@@ -176,17 +176,17 @@ export default function ContactsTab({
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <button
-                      className="font-semibold text-sm truncate text-left hover:text-violet-300 transition-colors"
+                      className="font-semibold text-sm truncate text-left hover:text-violet-300 transition-colors w-full"
                       onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
                     >
                       {contact.name}
                     </button>
-                    <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-3">
-                      <span>{contact.phone}</span>
+                    <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
+                      <span className="truncate">{contact.phone}</span>
                       {stats.total > 0 && (
-                        <span className="flex items-center gap-1 text-slate-600">
+                        <span className="flex items-center gap-1 text-slate-600 shrink-0">
                           <Phone size={9} />
-                          {stats.total} calls
+                          {stats.total}
                         </span>
                       )}
                     </div>
@@ -200,22 +200,22 @@ export default function ContactsTab({
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <button
                       id={`call-btn-${contact.id}`}
                       onClick={() => onCall(contact.id)}
                       disabled={callingId === contact.id}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition disabled:opacity-50"
+                      className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition disabled:opacity-50 min-h-[40px]"
                     >
                       {callingId === contact.id
-                        ? <><RefreshCw size={12} className="animate-spin" />Calling…</>
-                        : <><Zap size={12} />Call</>}
+                        ? <><RefreshCw size={12} className="animate-spin" /><span className="hidden sm:inline">Calling…</span></>
+                        : <><Zap size={12} /><span className="hidden sm:inline">Call</span></>}
                     </button>
                     <button
                       id={`delete-btn-${contact.id}`}
                       onClick={() => onDelete(contact.id)}
                       disabled={deletingId === contact.id}
-                      className="p-2 rounded-xl text-slate-600 hover:text-red-400 hover:bg-red-400/10 transition disabled:opacity-50"
+                      className="p-2 rounded-xl text-slate-600 hover:text-red-400 hover:bg-red-400/10 transition disabled:opacity-50 min-h-[40px] min-w-[40px] flex items-center justify-center"
                       aria-label={`Delete ${contact.name}`}
                     >
                       {deletingId === contact.id
@@ -224,7 +224,7 @@ export default function ContactsTab({
                     </button>
                     <button
                       onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
-                      className="p-2 rounded-xl text-slate-600 hover:text-white hover:bg-white/10 transition"
+                      className="p-2 rounded-xl text-slate-600 hover:text-white hover:bg-white/10 transition min-h-[40px] min-w-[40px] flex items-center justify-center"
                     >
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </button>

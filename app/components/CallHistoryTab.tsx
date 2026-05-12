@@ -47,64 +47,67 @@ export default function CallHistoryTab({
     <div className="space-y-4 animate-slide-up">
 
       {/* ── Toolbar ────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col gap-3">
 
-        {/* Status filter pills */}
-        <div className="flex items-center gap-1 bg-white/[0.04] border border-white/8 p-1 rounded-xl">
-          {(['all', 'completed', 'failed', 'in-progress'] as FilterStatus[]).map(f => (
+        {/* Row 1: Status filter pills + action buttons */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Status filter pills */}
+          <div className="flex items-center gap-1 bg-white/[0.04] border border-white/8 p-1 rounded-xl flex-1 sm:flex-none">
+            {(['all', 'completed', 'failed', 'in-progress'] as FilterStatus[]).map(f => (
+              <button
+                key={f}
+                id={`filter-${f}`}
+                onClick={() => setFilterStatus(f)}
+                className={`flex-1 sm:flex-none px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium transition-all capitalize min-h-[36px] ${
+                  filterStatus === f
+                    ? 'text-white shadow-lg'
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
+                style={filterStatus === f
+                  ? { background: 'linear-gradient(135deg,rgba(124,58,237,0.35),rgba(6,182,212,0.2))' }
+                  : {}}
+              >
+                {f.replace('-', '\u00a0')}
+              </button>
+            ))}
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center gap-2 ml-auto">
             <button
-              key={f}
-              id={`filter-${f}`}
-              onClick={() => setFilterStatus(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize ${
-                filterStatus === f
-                  ? 'text-white shadow-lg'
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-              style={filterStatus === f
-                ? { background: 'linear-gradient(135deg,rgba(124,58,237,0.35),rgba(6,182,212,0.2))' }
-                : {}}
+              id="export-csv-btn"
+              onClick={onExportCSV}
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-emerald-400 bg-white/5 hover:bg-emerald-400/10 border border-white/8 hover:border-emerald-500/30 px-3 py-2 rounded-xl transition min-h-[36px]"
             >
-              {f.replace('-', ' ')}
+              <BarChart3 size={12} />Export CSV
             </button>
-          ))}
+            <button
+              id="refresh-calls-btn"
+              onClick={onRefresh}
+              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 bg-white/5 hover:bg-white/10 border border-white/8 px-3 py-2 rounded-xl transition min-h-[36px]"
+            >
+              <RefreshCw size={11} />Refresh
+            </button>
+          </div>
         </div>
 
-        {/* Date range */}
-        <div className="flex items-center gap-2 flex-1 flex-wrap">
+        {/* Row 2: Date range — stacks on mobile */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <input
             type="date"
             value={dateFrom}
             onChange={e => setDateFrom(e.target.value)}
-            className="input-glow bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-300 transition-all [color-scheme:dark]"
+            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-300 transition-all [color-scheme:dark] min-h-[44px]"
             title="From date"
           />
-          <span className="text-slate-600 text-xs">to</span>
+          <span className="text-slate-600 text-xs text-center hidden sm:inline">to</span>
           <input
             type="date"
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
-            className="input-glow bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-300 transition-all [color-scheme:dark]"
+            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-300 transition-all [color-scheme:dark] min-h-[44px]"
             title="To date"
           />
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-2 ml-auto">
-          <button
-            id="export-csv-btn"
-            onClick={onExportCSV}
-            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-emerald-400 bg-white/5 hover:bg-emerald-400/10 border border-white/8 hover:border-emerald-500/30 px-3 py-2 rounded-xl transition"
-          >
-            <BarChart3 size={12} />Export CSV
-          </button>
-          <button
-            id="refresh-calls-btn"
-            onClick={onRefresh}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 bg-white/5 hover:bg-white/10 border border-white/8 px-3 py-2 rounded-xl transition"
-          >
-            <RefreshCw size={11} />Refresh
-          </button>
         </div>
       </div>
 
@@ -116,7 +119,7 @@ export default function CallHistoryTab({
 
       {/* ── Call list ──────────────────────────────────────── */}
       {filtered.length === 0 ? (
-        <div className="glass rounded-2xl p-16 text-center">
+        <div className="glass rounded-2xl p-8 sm:p-16 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
             <BarChart3 size={28} className="text-cyan-400/60" />
           </div>
@@ -134,7 +137,7 @@ export default function CallHistoryTab({
               style={{ animationDelay: `${i * 30}ms` }}
             >
               {/* ── Call row ─────────────────────────────── */}
-              <div className="p-4 flex items-center gap-4">
+              <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
 
                 {/* Avatar */}
                 <div

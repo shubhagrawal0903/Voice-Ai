@@ -84,40 +84,40 @@ export default function AnalyticsTab({ calls }: AnalyticsTabProps) {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Summary stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {statCards.map((s, i) => (
           <div
             key={s.label}
-            className="glass rounded-2xl p-5 flex flex-col gap-3 relative overflow-hidden animate-slide-up"
+            className="glass rounded-2xl p-4 sm:p-5 flex flex-row sm:flex-col items-center sm:items-start gap-4 sm:gap-3 relative overflow-hidden animate-slide-up"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-15 ${s.gradient}`} aria-hidden />
-            <div className="flex items-center justify-between relative z-10">
-              <span className="text-slate-400 text-xs font-medium tracking-wide uppercase">{s.label}</span>
-              <span className={`${s.color} bg-white/5 p-2 rounded-xl`}>{s.icon}</span>
+            <span className={`${s.color} bg-white/5 p-2.5 rounded-xl relative z-10 shrink-0`}>{s.icon}</span>
+            <div className="relative z-10 flex-1">
+              <div className="text-slate-400 text-xs font-medium tracking-wide uppercase mb-1">{s.label}</div>
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight">{s.value}</div>
             </div>
-            <div className="text-3xl font-bold tracking-tight relative z-10">{s.value}</div>
           </div>
         ))}
       </div>
 
       {/* Charts row 1 */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {/* Bar chart — daily volume */}
-        <div className="sm:col-span-2 glass rounded-2xl p-5">
-          <div className="flex items-center gap-2 mb-5">
+        <div className="sm:col-span-2 glass rounded-2xl p-4 sm:p-5">
+          <div className="flex items-center gap-2 mb-4 sm:mb-5">
             <TrendingUp size={14} className="text-violet-400" />
             <h3 className="text-sm font-semibold text-slate-300">Daily Call Volume</h3>
             <span className="text-xs text-slate-600 ml-auto">Last 7 days</span>
           </div>
           {calls.length === 0 ? (
-            <div className="h-48 flex items-center justify-center text-slate-600 text-sm">No data yet</div>
+            <div className="h-40 sm:h-48 flex items-center justify-center text-slate-600 text-sm">No data yet</div>
           ) : (
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={180}>
               <BarChart data={dailyVolume} {...chartConfig}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="Calls" radius={[6, 6, 0, 0]}
                   fill="url(#barGradient)" />
@@ -133,13 +133,13 @@ export default function AnalyticsTab({ calls }: AnalyticsTabProps) {
         </div>
 
         {/* Pie chart — resolution */}
-        <div className="glass rounded-2xl p-5">
-          <div className="flex items-center gap-2 mb-5">
+        <div className="glass rounded-2xl p-4 sm:p-5">
+          <div className="flex items-center gap-2 mb-4 sm:mb-5">
             <CheckCircle size={14} className="text-emerald-400" />
             <h3 className="text-sm font-semibold text-slate-300">Resolution</h3>
           </div>
           {resolutionData.length === 0 ? (
-            <div className="h-48 flex items-center justify-center text-slate-600 text-sm">No data yet</div>
+            <div className="h-40 sm:h-48 flex items-center justify-center text-slate-600 text-sm">No data yet</div>
           ) : (
             <>
               <ResponsiveContainer width="100%" height={160}>

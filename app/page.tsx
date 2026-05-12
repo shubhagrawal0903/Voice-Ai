@@ -173,28 +173,45 @@ export default function Home() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#080B12]/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center animate-pulse-ring"
-              style={{ background: 'linear-gradient(135deg,#7C3AED,#06B6D4)' }}
-            >
-              <PhoneCall size={16} className="text-white" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          {/* Top row: logo + title always visible */}
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center animate-pulse-ring shrink-0"
+                style={{ background: 'linear-gradient(135deg,#7C3AED,#06B6D4)' }}
+              >
+                <PhoneCall size={16} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-sm font-bold tracking-tight gradient-text">VoiceCall Dashboard</h1>
+                <p className="text-[10px] text-slate-500 leading-none mt-0.5">Powered by Vapi AI</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-sm font-bold tracking-tight gradient-text">VoiceCall Dashboard</h1>
-              <p className="text-[10px] text-slate-500 leading-none mt-0.5">Powered by Vapi AI</p>
+
+            {/* Stats pills: hidden on mobile (shown below), visible on sm+ */}
+            <div className="hidden sm:flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+                <User size={11} className="text-violet-400" />{contacts.length} contacts
+              </span>
+              <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+                <Mic size={11} className="text-cyan-400" />{calls.length} calls
+              </span>
+              <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+                <Zap size={11} className="text-emerald-400" />{completedCalls.length} done
+              </span>
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-3 text-xs">
-            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+          {/* Stats pills row on mobile only */}
+          <div className="sm:hidden flex items-center gap-2 text-xs pb-2 overflow-x-auto">
+            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400 shrink-0">
               <User size={11} className="text-violet-400" />{contacts.length} contacts
             </span>
-            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400 shrink-0">
               <Mic size={11} className="text-cyan-400" />{calls.length} calls
             </span>
-            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400">
+            <span className="flex items-center gap-1.5 bg-white/5 border border-white/8 px-3 py-1.5 rounded-full text-slate-400 shrink-0">
               <Zap size={11} className="text-emerald-400" />{completedCalls.length} done
             </span>
           </div>
@@ -202,21 +219,22 @@ export default function Home() {
       </header>
 
       {/* Main */}
-      <main className="max-w-6xl mx-auto px-6 py-10 relative z-10">
-        {/* Tab switcher */}
-        <div className="flex gap-1 bg-white/[0.04] border border-white/8 p-1 rounded-xl mb-8 w-fit">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 relative z-10">
+        {/* Tab switcher — full width on mobile, auto-width on desktop */}
+        <div className="flex gap-1 bg-white/[0.04] border border-white/8 p-1 rounded-xl mb-6 sm:mb-8 w-full sm:w-fit">
           {TABS.map(t => (
             <button
               key={t.id}
               id={`tab-${t.id}`}
               onClick={() => setTab(t.id)}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 flex-1 sm:flex-none px-3 sm:px-5 py-2.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] sm:min-h-0
                 ${tab === t.id ? 'text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
               style={tab === t.id
                 ? { background: 'linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.2))' }
                 : {}}
             >
-              {t.icon}{t.label}
+              {t.icon}
+              <span className="truncate">{t.label}</span>
             </button>
           ))}
         </div>
@@ -259,7 +277,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="max-w-6xl mx-auto px-6 py-8 border-t border-white/5 mt-8 flex items-center justify-between text-xs text-slate-600 relative z-10">
+      <footer className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 border-t border-white/5 mt-6 sm:mt-8 flex items-center justify-between text-xs text-slate-600 relative z-10">
         <span>VoiceCall Dashboard</span>
         <span className="flex items-center gap-1.5">
           <Zap size={10} className="text-violet-500" />
