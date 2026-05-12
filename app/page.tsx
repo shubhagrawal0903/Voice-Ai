@@ -66,7 +66,6 @@ export default function Home() {
   const [callingId,  setCallingId]  = useState<string | null>(null)
   const [syncingId,  setSyncingId]  = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
@@ -133,25 +132,6 @@ export default function Home() {
     if (res.ok) { await fetchCalls(); showToast('Call synced') }
     else showToast('Sync failed', 'error')
     setSyncingId(null)
-  }
-
-  const callAll = async (ids: string[]) => {
-    showToast(`Initiating ${ids.length} calls…`)
-    for (const id of ids) await triggerCall(id)
-    setSelectedIds(new Set())
-  }
-
-  const toggleSelect = (id: string) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
-    })
-  }
-
-  const toggleSelectAll = () => {
-    if (contacts.every(c => selectedIds.has(c.id))) setSelectedIds(new Set())
-    else setSelectedIds(new Set(contacts.map(c => c.id)))
   }
 
   const completedCalls = calls.filter(c => c.status === 'completed' || c.status === 'ended')
@@ -249,15 +229,11 @@ export default function Home() {
             loading={loading}
             name={name}
             phone={phone}
-            selectedIds={selectedIds}
             onNameChange={setName}
             onPhoneChange={setPhone}
             onAdd={addContact}
             onDelete={deleteContact}
             onCall={triggerCall}
-            onCallAll={callAll}
-            onSelectToggle={toggleSelect}
-            onSelectAll={toggleSelectAll}
           />
         )}
 

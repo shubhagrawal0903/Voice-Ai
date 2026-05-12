@@ -16,23 +16,18 @@ interface ContactsTabProps {
   loading: boolean
   name: string
   phone: string
-  selectedIds: Set<string>
   onNameChange: (v: string) => void
   onPhoneChange: (v: string) => void
   onAdd: () => void
   onDelete: (id: string) => void
   onCall: (id: string) => void
-  onCallAll: (ids: string[]) => void
-  onSelectToggle: (id: string) => void
-  onSelectAll: () => void
 }
 
 export default function ContactsTab({
   contacts, calls, callingId, deletingId, loading,
-  name, phone, selectedIds,
+  name, phone,
   onNameChange, onPhoneChange,
-  onAdd, onDelete, onCall, onCallAll,
-  onSelectToggle, onSelectAll,
+  onAdd, onDelete, onCall,
 }: ContactsTabProps) {
   const [search, setSearch] = useState('')
   const [expandedContact, setExpandedContact] = useState<string | null>(null)
@@ -42,8 +37,6 @@ export default function ContactsTab({
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.phone.includes(search)
     ), [contacts, search])
-
-  const allSelected = filtered.length > 0 && filtered.every(c => selectedIds.has(c.id))
 
   const getContactStats = (contact: Contact) => {
     const contactCalls = calls.filter(c => c.contactId === contact.id)
@@ -93,7 +86,7 @@ export default function ContactsTab({
         </div>
       </div>
 
-      {/* Search + bulk actions */}
+      {/* Search */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -105,17 +98,6 @@ export default function ContactsTab({
             className="input-glow w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-3 sm:py-2.5 text-sm text-slate-100 placeholder-slate-600 transition-all min-h-[44px]"
           />
         </div>
-        {selectedIds.size > 0 && (
-          <button
-            id="call-all-selected-btn"
-            onClick={() => onCallAll(Array.from(selectedIds))}
-            className="flex items-center justify-center gap-2 px-4 py-3 sm:py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90 w-full sm:w-auto min-h-[44px]"
-            style={{ background: 'linear-gradient(135deg,#059669,#06B6D4)' }}
-          >
-            <PhoneCall size={14} />
-            Call All Selected ({selectedIds.size})
-          </button>
-        )}
       </div>
 
       {/* Contact list */}
@@ -129,19 +111,6 @@ export default function ContactsTab({
         </div>
       ) : (
         <div className="space-y-2">
-          {/* Select all */}
-          <div className="flex items-center gap-2 px-2">
-            <input
-              id="select-all-checkbox"
-              type="checkbox"
-              checked={allSelected}
-              onChange={onSelectAll}
-              className="w-4 h-4 accent-violet-500 cursor-pointer"
-            />
-            <span className="text-xs text-slate-500">
-              {allSelected ? 'Deselect all' : `Select all (${filtered.length})`}
-            </span>
-          </div>
 
           {filtered.map((contact, i) => {
             const stats = getContactStats(contact)
@@ -155,15 +124,6 @@ export default function ContactsTab({
                 style={{ animationDelay: `${i * 30}ms` }}
               >
                 <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
-                  {/* Checkbox */}
-                  <input
-                    id={`select-${contact.id}`}
-                    type="checkbox"
-                    checked={selectedIds.has(contact.id)}
-                    onChange={() => onSelectToggle(contact.id)}
-                    className="w-4 h-4 accent-violet-500 cursor-pointer shrink-0"
-                  />
-
                   {/* Avatar */}
                   <div
                     className="w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white cursor-pointer hover:scale-105 transition-transform"

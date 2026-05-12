@@ -23,8 +23,6 @@ export default function CallHistoryTab({
 }: CallHistoryTabProps) {
   const [expandedCall, setExpandedCall] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
-  const [dateFrom, setDateFrom] = useState('')
-  const [dateTo, setDateTo]   = useState('')
 
   const filtered = useMemo(() => {
     let list = [...calls]
@@ -36,12 +34,8 @@ export default function CallHistoryTab({
       list = list.filter(c =>
         c.status === 'in-progress' || c.status === 'ringing' || c.status === 'initiated'
       )
-    if (dateFrom)
-      list = list.filter(c => new Date(c.createdAt) >= new Date(dateFrom))
-    if (dateTo)
-      list = list.filter(c => new Date(c.createdAt) <= new Date(dateTo + 'T23:59:59'))
     return list
-  }, [calls, filterStatus, dateFrom, dateTo])
+  }, [calls, filterStatus])
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -91,24 +85,6 @@ export default function CallHistoryTab({
           </div>
         </div>
 
-        {/* Row 2: Date range — stacks on mobile */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={e => setDateFrom(e.target.value)}
-            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-300 transition-all [color-scheme:dark] min-h-[44px]"
-            title="From date"
-          />
-          <span className="text-slate-600 text-xs text-center hidden sm:inline">to</span>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={e => setDateTo(e.target.value)}
-            className="input-glow flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-slate-300 transition-all [color-scheme:dark] min-h-[44px]"
-            title="To date"
-          />
-        </div>
       </div>
 
       {/* Call count */}
