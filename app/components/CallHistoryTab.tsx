@@ -298,7 +298,7 @@ export default function CallHistoryTab({
                           if (lowerLine.startsWith('assistant:')) {
                             return (
                               <div key={idx}>
-                                <span className="font-bold text-violet-400 mr-2">🤖 Maya (Agent):</span>
+                                <span className="font-bold text-violet-400 mr-2">🤖 Maya (Hotel Receptionist):</span>
                                 <span>{line.substring(10).trim()}</span>
                               </div>
                             )
