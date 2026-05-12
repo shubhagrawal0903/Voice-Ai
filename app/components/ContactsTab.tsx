@@ -121,27 +121,24 @@ export default function ContactsTab({
             return (
               <div
                 key={contact.id}
-                className="glass rounded-2xl overflow-hidden transition-all duration-200 animate-slide-up"
+                className="glass rounded-2xl overflow-hidden transition-all duration-200 animate-slide-up cursor-pointer hover:bg-white/[0.02]"
                 style={{ animationDelay: `${i * 30}ms` }}
+                onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
               >
                 <div className="p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
                   {/* Avatar */}
                   <div
-                    className="w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white cursor-pointer hover:scale-105 transition-transform"
+                    className="w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm font-bold shrink-0 text-white transition-transform"
                     style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.5),rgba(6,182,212,0.5))' }}
-                    onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
                   >
                     {initial}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <button
-                      className="font-semibold text-sm truncate text-left hover:text-violet-300 transition-colors w-full"
-                      onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
-                    >
+                    <div className="font-semibold text-sm truncate text-left transition-colors w-full">
                       {contact.name}
-                    </button>
+                    </div>
                     <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
                       <span className="truncate">{contact.phone}</span>
                       {stats.total > 0 && (
@@ -164,7 +161,10 @@ export default function ContactsTab({
                   <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <button
                       id={`call-btn-${contact.id}`}
-                      onClick={() => onCall(contact.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onCall(contact.id)
+                      }}
                       disabled={callingId === contact.id}
                       className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition disabled:opacity-50 min-h-[40px]"
                     >
@@ -174,7 +174,10 @@ export default function ContactsTab({
                     </button>
                     <button
                       id={`delete-btn-${contact.id}`}
-                      onClick={() => setConfirmDelete({ id: contact.id, name: contact.name })}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setConfirmDelete({ id: contact.id, name: contact.name })
+                      }}
                       disabled={deletingId === contact.id}
                       className="p-2 rounded-xl text-slate-600 hover:text-red-400 hover:bg-red-400/10 transition disabled:opacity-50 min-h-[40px] min-w-[40px] flex items-center justify-center"
                       aria-label={`Delete ${contact.name}`}
@@ -184,7 +187,10 @@ export default function ContactsTab({
                         : <Trash2 size={14} />}
                     </button>
                     <button
-                      onClick={() => setExpandedContact(isExpanded ? null : contact.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setExpandedContact(isExpanded ? null : contact.id)
+                      }}
                       className="p-2 rounded-xl text-slate-600 hover:text-white hover:bg-white/10 transition min-h-[40px] min-w-[40px] flex items-center justify-center"
                     >
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -251,16 +257,16 @@ export default function ContactsTab({
 
       {/* Delete Confirmation Modal */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20 sm:pt-28 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="glass rounded-2xl p-6 max-w-sm w-full animate-slide-up">
             <h3 className="text-lg font-semibold text-white mb-2">Delete Contact</h3>
             <p className="text-sm text-slate-400 mb-6">
-              Are you sure you want to delete <span className="text-white font-medium">{confirmDelete.name}</span>? This will also delete all call history for this contact.
+              Are you sure you want to delete <span className="text-white font-medium">{confirmDelete.name}</span>? All call history will also be deleted.
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setConfirmDelete(null)}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 transition"
+                className="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 transition bg-white/5"
               >
                 Cancel
               </button>
@@ -269,7 +275,7 @@ export default function ContactsTab({
                   onDelete(confirmDelete.id)
                   setConfirmDelete(null)
                 }}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-red-500/80 hover:bg-red-500 transition"
+                className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition"
               >
                 Delete
               </button>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'VoiceCall Dashboard — Powered by Vapi AI',
+  title: 'VoiceCall Dashboard — Powered by Bland AI',
   description: 'AI-powered phone call automation with transcripts, recordings, and real-time status updates.',
 }
 

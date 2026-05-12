@@ -101,41 +101,19 @@ export default function CallHistoryTab({
     <div className="space-y-4 animate-slide-up">
       
       {/* ── Stats Bar ────────────────────────────────────────── */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {[
-          { label: 'Total Calls', value: stats.total, icon: <Phone size={14} />, color: 'text-violet-400', bg: 'bg-violet-500/10', border: 'border-violet-500/20' },
-          { label: 'Picked Up', value: stats.pickedUp, icon: <CheckCircle size={14} />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
-          { label: 'Not Picked Up', value: stats.notPickedUp, icon: <XCircle size={14} />, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
-          { label: 'Pick Up Rate', value: `${stats.pickUpRate}%`, icon: <Percent size={14} />, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
-          { label: 'Avg Duration', value: stats.avgDurationStr, icon: <Clock size={14} />, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+          { label: 'Total Calls', value: stats.total, icon: <Phone size={12} />, color: 'text-violet-400', bg: 'bg-violet-500/10', border: 'border-violet-500/20' },
+          { label: 'Picked Up', value: stats.pickedUp, icon: <CheckCircle size={12} />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
+          { label: 'Not Picked Up', value: stats.notPickedUp, icon: <XCircle size={12} />, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+          { label: 'Pick Up Rate', value: `${stats.pickUpRate}%`, icon: <Percent size={12} />, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
+          { label: 'Resolved', value: stats.resolutionCounts.resolved, icon: <CheckCircle size={12} />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
+          { label: 'Partially Resolved', value: stats.resolutionCounts.partially, icon: <Clock size={12} />, color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20' },
         ].map(s => (
-          <div key={s.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border shrink-0 glass ${s.border}`}>
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${s.bg} ${s.color}`}>
-              {s.icon}
-            </div>
-            <div>
-              <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">{s.label}</div>
-              <div className={`text-sm font-bold ${s.color}`}>{s.value}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Resolution Stats Bar ────────────────────────────────────────── */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        {[
-          { label: 'Resolved', value: stats.resolutionCounts.resolved, icon: <CheckCircle size={14} />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
-          { label: 'Unresolved', value: stats.resolutionCounts.unresolved, icon: <XCircle size={14} />, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
-          { label: 'Partially Resolved', value: stats.resolutionCounts.partially, icon: <Clock size={14} />, color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20' },
-        ].map(s => (
-          <div key={s.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border shrink-0 glass ${s.border}`}>
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${s.bg} ${s.color}`}>
-              {s.icon}
-            </div>
-            <div>
-              <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">{s.label}</div>
-              <div className={`text-sm font-bold ${s.color}`}>{s.value}</div>
-            </div>
+          <div key={s.label} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border shrink-0 glass ${s.bg} ${s.border}`}>
+            <span className={s.color}>{s.icon}</span>
+            <span className="text-[11px] font-medium text-slate-300">{s.label}:</span>
+            <span className={`text-[11px] font-bold ${s.color}`}>{s.value}</span>
           </div>
         ))}
       </div>

@@ -180,7 +180,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-sm font-bold tracking-tight gradient-text">VoiceCall Dashboard</h1>
-                <p className="text-[10px] text-slate-500 leading-none mt-0.5">Powered by Vapi AI</p>
+                <p className="text-[10px] text-slate-500 leading-none mt-0.5">Powered by Bland AI</p>
               </div>
             </div>
 
@@ -272,7 +272,7 @@ export default function Home() {
         <span>VoiceCall Dashboard</span>
         <span className="flex items-center gap-1.5">
           <Zap size={10} className="text-violet-500" />
-          Powered by Vapi AI
+          Powered by Bland AI
         </span>
       </footer>
     </div>
