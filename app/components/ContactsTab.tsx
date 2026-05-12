@@ -31,6 +31,7 @@ export default function ContactsTab({
 }: ContactsTabProps) {
   const [search, setSearch] = useState('')
   const [expandedContact, setExpandedContact] = useState<string | null>(null)
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string, name: string } | null>(null)
 
   const filtered = useMemo(() =>
     contacts.filter(c =>
@@ -173,7 +174,7 @@ export default function ContactsTab({
                     </button>
                     <button
                       id={`delete-btn-${contact.id}`}
-                      onClick={() => onDelete(contact.id)}
+                      onClick={() => setConfirmDelete({ id: contact.id, name: contact.name })}
                       disabled={deletingId === contact.id}
                       className="p-2 rounded-xl text-slate-600 hover:text-red-400 hover:bg-red-400/10 transition disabled:opacity-50 min-h-[40px] min-w-[40px] flex items-center justify-center"
                       aria-label={`Delete ${contact.name}`}
@@ -245,6 +246,35 @@ export default function ContactsTab({
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="glass rounded-2xl p-6 max-w-sm w-full animate-slide-up">
+            <h3 className="text-lg font-semibold text-white mb-2">Delete Contact</h3>
+            <p className="text-sm text-slate-400 mb-6">
+              Are you sure you want to delete <span className="text-white font-medium">{confirmDelete.name}</span>? This will also delete all call history for this contact.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  onDelete(confirmDelete.id)
+                  setConfirmDelete(null)
+                }}
+                className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-red-500/80 hover:bg-red-500 transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

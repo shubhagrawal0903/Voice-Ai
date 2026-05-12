@@ -37,15 +37,30 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
 
 /* ─── CSV Export ─────────────────────────────────────────────────── */
 function exportCallsCSV(calls: Call[]) {
-  const header = ['ID', 'Contact', 'Phone', 'Status', 'Duration (s)', 'Started At', 'Created At']
+  const formatDuration = (dur: number | null | undefined) => {
+    if (!dur) return ''
+    const m = Math.floor(dur / 60)
+    const s = dur % 60
+    return m > 0 ? `${m}m ${s}s` : `${s}s`
+  }
+
+  const formatDate = (dateStr: string | Date | null | undefined) => {
+    if (!dateStr) return ''
+    return new Date(dateStr).toLocaleString('en-US', {
+      day: 'numeric', month: 'short', year: 'numeric',
+      hour: 'numeric', minute: '2-digit', hour12: true
+    })
+  }
+
+  const header = ['ID', 'Contact', 'Phone', 'Status', 'Duration', 'Started At', 'Created At']
   const rows = calls.map(c => [
     c.id,
     c.contact?.name || '',
-    c.contact?.phone || '',
+    c.contact?.phone ? `'${c.contact.phone}` : '',
     c.status,
-    c.duration ?? '',
-    c.startedAt ? new Date(c.startedAt).toISOString() : '',
-    new Date(c.createdAt).toISOString(),
+    formatDuration(c.duration),
+    formatDate(c.startedAt),
+    formatDate(c.createdAt),
   ])
   const csv = [header, ...rows].map(r => r.map(String).map(v => `"${v.replace(/"/g, '""')}"`).join(',')).join('\n')
   const blob = new Blob([csv], { type: 'text/csv' })
